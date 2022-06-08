@@ -1,14 +1,14 @@
 import { Contract } from '@ethersproject/contracts'
 import { getNetwork } from '@ethersproject/networks'
 import { getDefaultProvider } from '@ethersproject/providers'
-import { Token, TokenAmount } from '@vutien/sdk-core'
+import { Token, TokenAmount } from '@kyberswap/ks-sdk-core'
 import { Pair } from './entities/pair'
 import invariant from 'tiny-invariant'
 import ERC20 from './abis/ERC20.json'
 import DMMFactory from './abis/DMMFactory.json'
 import DMMPool from './abis/DMMPool.json'
 
-import { ChainId } from '@vutien/sdk-core'
+import { ChainId } from '@kyberswap/ks-sdk-core'
 import { JSBI } from '.'
 
 let TOKEN_DECIMALS_CACHE: { [chainId: number]: { [address: string]: number } } = {

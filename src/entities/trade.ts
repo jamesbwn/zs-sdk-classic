@@ -13,7 +13,7 @@ import {
   Fraction,
   sortedInsert,
   computePriceImpact
-} from '@vutien/sdk-core'
+} from '@kyberswap/ks-sdk-core'
 // import { Fraction } from './fractions/fraction'
 // import { Percent } from './fractions/percent'
 // import { Price } from './fractions/price'

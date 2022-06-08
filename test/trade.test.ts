@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
 import { Pair, Route, Trade } from '../src'
 
-import { ChainId, Ether, CurrencyAmount, Percent, Token, TokenAmount, TradeType, WETH } from '@vutien/sdk-core'
+import { ChainId, Ether, CurrencyAmount, Percent, Token, TokenAmount, TradeType, WETH } from '@kyberswap/ks-sdk-core'
 
 describe('Trade', () => {
   const ETHER = Ether.onChain(1)

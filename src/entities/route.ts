@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant'
 // import { Token, WETH } from './token'
 import { Pair } from './pair'
 // import { Price } from './fractions/price'
-import { ChainId, Token, Price, Currency } from '@vutien/sdk-core'
+import { ChainId, Token, Price, Currency } from '@kyberswap/ks-sdk-core'
 
 export class Route<TInput extends Currency, TOutput extends Currency> {
   public readonly pairs: Pair[]

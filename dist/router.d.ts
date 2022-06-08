@@ -1,4 +1,4 @@
-import { Currency, Percent, TradeType } from '@vutien/sdk-core';
+import { Currency, Percent, TradeType } from '@kyberswap/ks-sdk-core';
 import { Trade } from './entities';
 /**
  * Options for producing the arguments to send call to the router.

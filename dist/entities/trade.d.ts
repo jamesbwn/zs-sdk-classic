@@ -1,4 +1,4 @@
-import { CurrencyAmount, Currency, Price, Percent, TradeType } from '@vutien/sdk-core';
+import { CurrencyAmount, Currency, Price, Percent, TradeType } from '@kyberswap/ks-sdk-core';
 import { Pair } from './pair';
 import { Route } from './route';
 /**

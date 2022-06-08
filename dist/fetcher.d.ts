@@ -1,6 +1,6 @@
-import { Token } from '@vutien/sdk-core';
+import { Token } from '@kyberswap/ks-sdk-core';
 import { Pair } from './entities/pair';
-import { ChainId } from '@vutien/sdk-core';
+import { ChainId } from '@kyberswap/ks-sdk-core';
 /**
  * Contains methods for constructing instances of pairs and tokens from on-chain data.
  */

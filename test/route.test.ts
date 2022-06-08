@@ -1,6 +1,6 @@
 import JSBI from 'jsbi'
 import { Pair, Route } from '../src'
-import { Token, WETH, ChainId, TokenAmount, Ether } from '@vutien/sdk-core'
+import { Token, WETH, ChainId, TokenAmount, Ether } from '@kyberswap/ks-sdk-core'
 
 describe('Route', () => {
   const ETHER = Ether.onChain(1)

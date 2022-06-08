@@ -1,6 +1,6 @@
 import invariant from 'tiny-invariant'
 import { Pair, Route, Router, Trade } from '../src'
-import { ChainId, CurrencyAmount, Ether, Percent, Token, TokenAmount, WETH } from '@vutien/sdk-core'
+import { ChainId, CurrencyAmount, Ether, Percent, Token, TokenAmount, WETH } from '@kyberswap/ks-sdk-core'
 import JSBI from 'jsbi'
 
 function checkDeadline(deadline: string[] | string): void {

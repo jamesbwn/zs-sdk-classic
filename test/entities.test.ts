@@ -1,7 +1,7 @@
 import invariant from 'tiny-invariant'
 // import { ChainId, WETH as _WETH, TradeType, Rounding, Token, TokenAmount, Pair, Route, Trade, JSBI } from '../src'
 
-import { ChainId, WETH as _WETH, Token, TokenAmount, Rounding, TradeType } from '@vutien/sdk-core'
+import { ChainId, WETH as _WETH, Token, TokenAmount, Rounding, TradeType } from '@kyberswap/ks-sdk-core'
 import { Pair, Route, Trade } from '../src'
 import JSBI from 'jsbi'
 const ADDRESSES = [

@@ -1,5 +1,5 @@
 import { Fetcher } from '../src'
-import { ChainId } from '@vutien/sdk-core'
+import { ChainId } from '@kyberswap/ks-sdk-core'
 
 // TODO: replace the provider in these tests
 describe('data', () => {

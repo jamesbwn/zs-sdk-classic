@@ -1,4 +1,4 @@
-import { Token, Price, TokenAmount, BigintIsh, sqrt, ChainId } from '@vutien/sdk-core'
+import { Token, Price, TokenAmount, BigintIsh, sqrt, ChainId } from '@kyberswap/ks-sdk-core'
 // import { TokenAmount, Price } from './fractions'
 import invariant from 'tiny-invariant'
 import JSBI from 'jsbi'

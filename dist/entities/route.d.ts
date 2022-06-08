@@ -1,5 +1,5 @@
 import { Pair } from './pair';
-import { ChainId, Token, Price, Currency } from '@vutien/sdk-core';
+import { ChainId, Token, Price, Currency } from '@kyberswap/ks-sdk-core';
 export declare class Route<TInput extends Currency, TOutput extends Currency> {
     readonly pairs: Pair[];
     readonly path: Token[];

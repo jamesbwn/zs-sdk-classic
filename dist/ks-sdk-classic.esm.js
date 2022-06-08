@@ -1,6 +1,6 @@
 import JSBI from 'jsbi';
 export { default as JSBI } from 'jsbi';
-import { Price, TokenAmount, sqrt, Token, TradeType, Fraction, CurrencyAmount, computePriceImpact, sortedInsert, validateAndParseAddress, ChainId } from '@vutien/sdk-core';
+import { Price, TokenAmount, sqrt, Token, TradeType, Fraction, CurrencyAmount, computePriceImpact, sortedInsert, validateAndParseAddress, ChainId } from '@kyberswap/ks-sdk-core';
 import invariant from 'tiny-invariant';
 import { Contract } from '@ethersproject/contracts';
 import { getNetwork } from '@ethersproject/networks';

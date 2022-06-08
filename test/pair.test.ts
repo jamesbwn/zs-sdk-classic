@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
 import { Pair } from '../src'
 
-import { TokenAmount, WETH, Price, ChainId, Token } from '@vutien/sdk-core'
+import { TokenAmount, WETH, Price, ChainId, Token } from '@kyberswap/ks-sdk-core'
 
 describe('Pair', () => {
   const PAIR_ADDRESS = '0x0000000000000000000000000000000000000003'

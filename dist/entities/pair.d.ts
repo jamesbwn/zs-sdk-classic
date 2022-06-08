@@ -1,4 +1,4 @@
-import { Token, Price, TokenAmount, BigintIsh, ChainId } from '@vutien/sdk-core';
+import { Token, Price, TokenAmount, BigintIsh, ChainId } from '@kyberswap/ks-sdk-core';
 import JSBI from 'jsbi';
 export declare class Pair {
     readonly liquidityToken: Token;
