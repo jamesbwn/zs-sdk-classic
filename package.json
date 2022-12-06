@@ -28,7 +28,7 @@
     "@ethersproject/networks": "^5.0.2",
     "@ethersproject/providers": "^5.0.5",
     "@ethersproject/solidity": "^5.0.2",
-    "@kyberswap/ks-sdk-core": "^0.0.12",
+    "@kyberswap/ks-sdk-core": "jamesbwn/zs-sdk-core",
     "big.js": "^5.2.2",
     "decimal.js-light": "^2.5.0",
     "jsbi": "^3.1.4",

@@ -87,6 +87,7 @@ export abstract class Router {
     const amountOut: string = toHex(trade.minimumAmountOut(options.allowedSlippage))
     const pairsPath: string[] = trade.route.pairs.map(pair => pair.address)
     const path: string[] = trade.route.path.map(token => token.address)
+    console.log('debug route st1::', pairsPath, path)
     const deadline =
       'ttl' in options
         ? `0x${(Math.floor(new Date().getTime() / 1000) + options.ttl).toString(16)}`

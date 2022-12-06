@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var JSBI = _interopDefault(require('jsbi'));
-var sdkCore = require('@kyberswap/ks-sdk-core');
+var ksSdkCore = require('@kyberswap/ks-sdk-core');
 var invariant = _interopDefault(require('tiny-invariant'));
 var contracts = require('@ethersproject/contracts');
 var networks = require('@ethersproject/networks');
@@ -1530,7 +1530,7 @@ var Pair = /*#__PURE__*/function () {
     ? [tokenAmountA, tokenAmountB] : [tokenAmountB, tokenAmountA];
     var virtualTokenAmounts = tokenAmountA.currency.sortsBefore(tokenAmountB.currency) // does safety checks
     ? [virtualTokenAmountA, virtualTokenAmountB] : [virtualTokenAmountB, virtualTokenAmountA];
-    this.liquidityToken = new sdkCore.Token(tokenAmounts[0].currency.chainId, address, 18, 'DMM-LP', 'DMM LP');
+    this.liquidityToken = new ksSdkCore.Token(tokenAmounts[0].currency.chainId, address, 18, 'DMM-LP', 'DMM LP');
     this.tokenAmounts = tokenAmounts;
     this.virtualTokenAmounts = virtualTokenAmounts;
     this.fee = fee;
@@ -1565,7 +1565,7 @@ var Pair = /*#__PURE__*/function () {
     !this.involvesToken(token) ?  invariant(false, 'TOKEN')  : void 0;
     var r1 = this.tokenAmounts[1].divide(this.tokenAmounts[0]);
     var r2 = this.tokenAmounts[0].divide(this.tokenAmounts[1]);
-    return token.equals(this.token0) ? new sdkCore.Price(this.token0, this.token1, r1.denominator, r1.numerator) : new sdkCore.Price(this.token1, this.token0, r2.denominator, r2.numerator);
+    return token.equals(this.token0) ? new ksSdkCore.Price(this.token0, this.token1, r1.denominator, r1.numerator) : new ksSdkCore.Price(this.token1, this.token0, r2.denominator, r2.numerator);
   }
   /**
    * Returns the chain ID of the tokens in the pair.
@@ -1595,9 +1595,10 @@ var Pair = /*#__PURE__*/function () {
     var inputAmountWithFee = JSBI.divide(JSBI.multiply(inputAmount.quotient, JSBI.subtract(PRECISION, this.fee)), PRECISION);
     var numerator = JSBI.multiply(inputAmountWithFee, outputReserve.quotient);
     var denominator = JSBI.add(inputReserve.quotient, inputAmountWithFee);
-    var outputAmount = sdkCore.TokenAmount.fromRawAmount(outputToken, JSBI.divide(numerator, denominator));
+    var outputAmount = ksSdkCore.TokenAmount.fromRawAmount(outputToken, JSBI.divide(numerator, denominator));
 
     if (JSBI.greaterThanOrEqual(outputAmount.quotient, this.reserveOf(outputToken).quotient)) {
+      console.log('debug get out st4 throw1::', outputAmount.quotient.toString(), this.reserveOf(outputToken).quotient.toString());
       throw new InsufficientReservesError();
     }
 
@@ -1624,7 +1625,7 @@ var Pair = /*#__PURE__*/function () {
     var inputAmountWithFee = JSBI.add(JSBI.divide(numerator, denominator), ONE);
     numerator = JSBI.multiply(inputAmountWithFee, PRECISION);
     denominator = JSBI.subtract(PRECISION, this.fee);
-    var inputAmount = sdkCore.TokenAmount.fromRawAmount(inputToken, JSBI.divide(JSBI.subtract(JSBI.add(numerator, denominator), ONE), denominator));
+    var inputAmount = ksSdkCore.TokenAmount.fromRawAmount(inputToken, JSBI.divide(JSBI.subtract(JSBI.add(numerator, denominator), ONE), denominator));
     return [inputAmount, [inputReserve.add(inputAmount), outputReserve.subtract(outputAmount)]];
   };
 
@@ -1636,7 +1637,7 @@ var Pair = /*#__PURE__*/function () {
     var liquidity;
 
     if (JSBI.equal(totalSupply.quotient, ZERO)) {
-      liquidity = JSBI.subtract(sdkCore.sqrt(JSBI.multiply(tokenAmounts[0].quotient, tokenAmounts[1].quotient)), MINIMUM_LIQUIDITY);
+      liquidity = JSBI.subtract(ksSdkCore.sqrt(JSBI.multiply(tokenAmounts[0].quotient, tokenAmounts[1].quotient)), MINIMUM_LIQUIDITY);
     } else {
       var amount0 = JSBI.divide(JSBI.multiply(tokenAmounts[0].quotient, totalSupply.quotient), this.reserve0.quotient);
       var amount1 = JSBI.divide(JSBI.multiply(tokenAmounts[1].quotient, totalSupply.quotient), this.reserve1.quotient);
@@ -1647,7 +1648,7 @@ var Pair = /*#__PURE__*/function () {
       throw new InsufficientInputAmountError();
     }
 
-    return sdkCore.TokenAmount.fromRawAmount(this.liquidityToken, liquidity);
+    return ksSdkCore.TokenAmount.fromRawAmount(this.liquidityToken, liquidity);
   };
 
   _proto.getLiquidityValue = function getLiquidityValue(token, totalSupply, liquidity, feeBps, kLast) {
@@ -1668,14 +1669,14 @@ var Pair = /*#__PURE__*/function () {
       var kLastParsed = JSBI.BigInt(kLast);
 
       if (!JSBI.equal(kLastParsed, ZERO)) {
-        var rootK = sdkCore.sqrt(JSBI.multiply(this.virtualReserve0.quotient, this.virtualReserve1.quotient));
-        var rootKLast = sdkCore.sqrt(kLastParsed);
+        var rootK = ksSdkCore.sqrt(JSBI.multiply(this.virtualReserve0.quotient, this.virtualReserve1.quotient));
+        var rootKLast = ksSdkCore.sqrt(kLastParsed);
 
         if (JSBI.greaterThan(rootK, rootKLast)) {
           var numerator = JSBI.multiply(JSBI.multiply(totalSupply.quotient, JSBI.subtract(rootK, rootKLast)), feeBps);
           var denominator = JSBI.multiply(JSBI.add(rootK, rootKLast), JSBI.BigInt(5000));
           var feeLiquidity = JSBI.divide(numerator, denominator);
-          totalSupplyAdjusted = totalSupply.add(sdkCore.TokenAmount.fromRawAmount(this.liquidityToken, feeLiquidity));
+          totalSupplyAdjusted = totalSupply.add(ksSdkCore.TokenAmount.fromRawAmount(this.liquidityToken, feeLiquidity));
         } else {
           totalSupplyAdjusted = totalSupply;
         }
@@ -1684,14 +1685,14 @@ var Pair = /*#__PURE__*/function () {
       }
     }
 
-    return sdkCore.TokenAmount.fromRawAmount(token, JSBI.divide(JSBI.multiply(liquidity.quotient, this.reserveOf(token).quotient), totalSupplyAdjusted.quotient));
+    return ksSdkCore.TokenAmount.fromRawAmount(token, JSBI.divide(JSBI.multiply(liquidity.quotient, this.reserveOf(token).quotient), totalSupplyAdjusted.quotient));
   };
 
   _createClass(Pair, [{
     key: "token0Price",
     get: function get() {
       var result = this.virtualTokenAmounts[1].divide(this.virtualTokenAmounts[0]);
-      return new sdkCore.Price(this.token0, this.token1, result.denominator, result.numerator);
+      return new ksSdkCore.Price(this.token0, this.token1, result.denominator, result.numerator);
     }
     /**
      * Returns the current mid price of the pair in terms of token1, i.e. the ratio of reserve0 to reserve1
@@ -1701,7 +1702,7 @@ var Pair = /*#__PURE__*/function () {
     key: "token1Price",
     get: function get() {
       var result = this.virtualTokenAmounts[0].divide(this.virtualTokenAmounts[1]);
-      return new sdkCore.Price(this.token1, this.token0, result.denominator, result.numerator);
+      return new ksSdkCore.Price(this.token1, this.token0, result.denominator, result.numerator);
     }
   }, {
     key: "chainId",
@@ -1791,7 +1792,7 @@ var Route = /*#__PURE__*/function () {
       var reduced = prices.slice(1).reduce(function (accumulator, currentValue) {
         return accumulator.multiply(currentValue);
       }, prices[0]);
-      return this._midPrice = new sdkCore.Price(this.input, this.output, reduced.denominator, reduced.numerator);
+      return this._midPrice = new ksSdkCore.Price(this.input, this.output, reduced.denominator, reduced.numerator);
     }
   }, {
     key: "chainId",
@@ -1876,7 +1877,7 @@ var Trade = /*#__PURE__*/function () {
     var nextInputReserves = new Array(route.pairs.length);
     var nextOutputReserves = new Array(route.pairs.length);
 
-    if (tradeType === sdkCore.TradeType.EXACT_INPUT) {
+    if (tradeType === ksSdkCore.TradeType.EXACT_INPUT) {
       !amount.currency.equals(route.input) ?  invariant(false, 'INPUT')  : void 0;
       tokenAmounts[0] = amount.wrapped;
 
@@ -1910,11 +1911,11 @@ var Trade = /*#__PURE__*/function () {
 
     this.route = route;
     this.tradeType = tradeType;
-    this.inputAmount = tradeType === sdkCore.TradeType.EXACT_INPUT ? sdkCore.CurrencyAmount.fromFractionalAmount(route.input, amount.numerator, amount.denominator) : sdkCore.CurrencyAmount.fromFractionalAmount(route.input, tokenAmounts[0].numerator, tokenAmounts[0].denominator);
-    this.outputAmount = tradeType === sdkCore.TradeType.EXACT_OUTPUT ? sdkCore.CurrencyAmount.fromFractionalAmount(route.output, amount.numerator, amount.denominator) : sdkCore.CurrencyAmount.fromFractionalAmount(route.output, tokenAmounts[tokenAmounts.length - 1].numerator, tokenAmounts[tokenAmounts.length - 1].denominator);
-    this.executionPrice = new sdkCore.Price(this.inputAmount.currency, this.outputAmount.currency, this.inputAmount.quotient, this.outputAmount.quotient); // this.nextMidPrice = Price.fromReserves(nextInputReserves, nextOutputReserves)
+    this.inputAmount = tradeType === ksSdkCore.TradeType.EXACT_INPUT ? ksSdkCore.CurrencyAmount.fromFractionalAmount(route.input, amount.numerator, amount.denominator) : ksSdkCore.CurrencyAmount.fromFractionalAmount(route.input, tokenAmounts[0].numerator, tokenAmounts[0].denominator);
+    this.outputAmount = tradeType === ksSdkCore.TradeType.EXACT_OUTPUT ? ksSdkCore.CurrencyAmount.fromFractionalAmount(route.output, amount.numerator, amount.denominator) : ksSdkCore.CurrencyAmount.fromFractionalAmount(route.output, tokenAmounts[tokenAmounts.length - 1].numerator, tokenAmounts[tokenAmounts.length - 1].denominator);
+    this.executionPrice = new ksSdkCore.Price(this.inputAmount.currency, this.outputAmount.currency, this.inputAmount.quotient, this.outputAmount.quotient); // this.nextMidPrice = Price.fromReserves(nextInputReserves, nextOutputReserves)
 
-    this.priceImpact = sdkCore.computePriceImpact(route.midPrice, this.inputAmount, this.outputAmount);
+    this.priceImpact = ksSdkCore.computePriceImpact(route.midPrice, this.inputAmount, this.outputAmount);
   }
   /**
    * Constructs an exact in trade with the given amount in and route
@@ -1924,7 +1925,7 @@ var Trade = /*#__PURE__*/function () {
 
 
   Trade.exactIn = function exactIn(route, amountIn) {
-    return new Trade(route, amountIn, sdkCore.TradeType.EXACT_INPUT);
+    return new Trade(route, amountIn, ksSdkCore.TradeType.EXACT_INPUT);
   }
   /**
    * Constructs an exact out trade with the given amount out and route
@@ -1934,7 +1935,7 @@ var Trade = /*#__PURE__*/function () {
   ;
 
   Trade.exactOut = function exactOut(route, amountOut) {
-    return new Trade(route, amountOut, sdkCore.TradeType.EXACT_OUTPUT);
+    return new Trade(route, amountOut, ksSdkCore.TradeType.EXACT_OUTPUT);
   }
   /**
    * Get the minimum amount that must be received from this trade for the given slippage tolerance
@@ -1947,11 +1948,11 @@ var Trade = /*#__PURE__*/function () {
   _proto.minimumAmountOut = function minimumAmountOut(slippageTolerance) {
     !!slippageTolerance.lessThan(ZERO) ?  invariant(false, 'SLIPPAGE_TOLERANCE')  : void 0;
 
-    if (this.tradeType === sdkCore.TradeType.EXACT_OUTPUT) {
+    if (this.tradeType === ksSdkCore.TradeType.EXACT_OUTPUT) {
       return this.outputAmount;
     } else {
-      var slippageAdjustedAmountOut = new sdkCore.Fraction(ONE).add(slippageTolerance).invert().multiply(this.outputAmount.quotient).quotient;
-      return sdkCore.CurrencyAmount.fromRawAmount(this.outputAmount.currency, slippageAdjustedAmountOut);
+      var slippageAdjustedAmountOut = new ksSdkCore.Fraction(ONE).add(slippageTolerance).invert().multiply(this.outputAmount.quotient).quotient;
+      return ksSdkCore.CurrencyAmount.fromRawAmount(this.outputAmount.currency, slippageAdjustedAmountOut);
     }
   }
   /**
@@ -1963,11 +1964,11 @@ var Trade = /*#__PURE__*/function () {
   _proto.maximumAmountIn = function maximumAmountIn(slippageTolerance) {
     !!slippageTolerance.lessThan(ZERO) ?  invariant(false, 'SLIPPAGE_TOLERANCE')  : void 0;
 
-    if (this.tradeType === sdkCore.TradeType.EXACT_INPUT) {
+    if (this.tradeType === ksSdkCore.TradeType.EXACT_INPUT) {
       return this.inputAmount;
     } else {
-      var slippageAdjustedAmountIn = new sdkCore.Fraction(ONE).add(slippageTolerance).multiply(this.inputAmount.quotient).quotient;
-      return sdkCore.CurrencyAmount.fromRawAmount(this.inputAmount.currency, slippageAdjustedAmountIn);
+      var slippageAdjustedAmountIn = new ksSdkCore.Fraction(ONE).add(slippageTolerance).multiply(this.inputAmount.quotient).quotient;
+      return ksSdkCore.CurrencyAmount.fromRawAmount(this.inputAmount.currency, slippageAdjustedAmountIn);
     }
   }
   /**
@@ -2070,7 +2071,7 @@ var Trade = /*#__PURE__*/function () {
 
 
       if (bestAmountOut.currency.equals(tokenOut)) {
-        sdkCore.sortedInsert(bestTrades, new Trade(new Route([].concat(currentPairs, [bestPool]), originalAmountIn.currency, currencyOut), originalAmountIn, sdkCore.TradeType.EXACT_INPUT), maxNumResults, tradeComparator);
+        ksSdkCore.sortedInsert(bestTrades, new Trade(new Route([].concat(currentPairs, [bestPool]), originalAmountIn.currency, currencyOut), originalAmountIn, ksSdkCore.TradeType.EXACT_INPUT), maxNumResults, tradeComparator);
       } else if (maxHops > 1 && pairs.length > 1) {
         var pairsExcludingThisPair = pairs.slice(0, i).concat(pairs.slice(i + 1, pairs.length)); // otherwise, consider all the other paths that lead from this token as long as we have not exceeded maxHops
 
@@ -2184,7 +2185,7 @@ var Trade = /*#__PURE__*/function () {
 
 
       if (bestAmountIn.currency.equals(tokenIn)) {
-        sdkCore.sortedInsert(bestTrades, new Trade(new Route([bestPool].concat(currentPairs), currencyIn, originalAmountOut.currency), originalAmountOut, sdkCore.TradeType.EXACT_OUTPUT), maxNumResults, tradeComparator);
+        ksSdkCore.sortedInsert(bestTrades, new Trade(new Route([bestPool].concat(currentPairs), currencyIn, originalAmountOut.currency), originalAmountOut, ksSdkCore.TradeType.EXACT_OUTPUT), maxNumResults, tradeComparator);
       } else if (maxHops > 1 && pairs.length > 1) {
         var pairsExcludingThisPair = pairs.slice(0, i).concat(pairs.slice(i + 1, pairs.length)); // otherwise, consider all the other paths that arrive at this token as long as we have not exceeded maxHops
 
@@ -2228,7 +2229,7 @@ var Router = /*#__PURE__*/function () {
 
     !!(etherIn && etherOut) ?  invariant(false, 'ETHER_IN_OUT')  : void 0;
     !(!('ttl' in options) || options.ttl > 0) ?  invariant(false, 'TTL')  : void 0;
-    var to = sdkCore.validateAndParseAddress(options.recipient);
+    var to = ksSdkCore.validateAndParseAddress(options.recipient);
     var amountIn = toHex(trade.maximumAmountIn(options.allowedSlippage));
     var amountOut = toHex(trade.minimumAmountOut(options.allowedSlippage));
     var pairsPath = trade.route.pairs.map(function (pair) {
@@ -2237,6 +2238,7 @@ var Router = /*#__PURE__*/function () {
     var path = trade.route.path.map(function (token) {
       return token.address;
     });
+    console.log('debug route st1::', pairsPath, path);
     var deadline = 'ttl' in options ? "0x" + (Math.floor(new Date().getTime() / 1000) + options.ttl).toString(16) : "0x" + options.deadline.toString(16);
     var useFeeOnTransfer = Boolean(options.feeOnTransfer);
     var methodName;
@@ -2244,7 +2246,7 @@ var Router = /*#__PURE__*/function () {
     var value;
 
     switch (trade.tradeType) {
-      case sdkCore.TradeType.EXACT_INPUT:
+      case ksSdkCore.TradeType.EXACT_INPUT:
         if (etherIn) {
           methodName = useFeeOnTransfer ? 'swapExactETHForTokensSupportingFeeOnTransferTokens' : 'swapExactETHForTokens'; // (uint amountOutMin, address[] calldata pairsPath, address[] calldata path, address to, uint deadline)
 
@@ -2264,7 +2266,7 @@ var Router = /*#__PURE__*/function () {
 
         break;
 
-      case sdkCore.TradeType.EXACT_OUTPUT:
+      case ksSdkCore.TradeType.EXACT_OUTPUT:
         !!useFeeOnTransfer ?  invariant(false, 'EXACT_OUT_FOT')  : void 0;
 
         if (etherIn) {
@@ -2298,7 +2300,7 @@ var Router = /*#__PURE__*/function () {
 }();
 
 var _TOKEN_DECIMALS_CACHE;
-var TOKEN_DECIMALS_CACHE = (_TOKEN_DECIMALS_CACHE = {}, _TOKEN_DECIMALS_CACHE[sdkCore.ChainId.MAINNET] = {
+var TOKEN_DECIMALS_CACHE = (_TOKEN_DECIMALS_CACHE = {}, _TOKEN_DECIMALS_CACHE[ksSdkCore.ChainId.MAINNET] = {
   '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9 // DGD
 
 }, _TOKEN_DECIMALS_CACHE);
@@ -2327,7 +2329,7 @@ var Fetcher = /*#__PURE__*/function () {
       var _TOKEN_DECIMALS_CACHE2, _TOKEN_DECIMALS_CACHE3;
 
       var _temp3 = function _temp3(parsedDecimals) {
-        return new sdkCore.Token(chainId, address, parsedDecimals, symbol, name);
+        return new ksSdkCore.Token(chainId, address, parsedDecimals, symbol, name);
       };
 
       if (provider === undefined) provider = providers.getDefaultProvider(networks.getNetwork(chainId));
@@ -2368,7 +2370,7 @@ var Fetcher = /*#__PURE__*/function () {
                   feeInPrecision = _ref[4];
               return Promise.resolve(poolContract.ampBps()).then(function (ampBps) {
                 var balances = tokenA.sortsBefore(tokenB) ? [reserve0, reserve1, vReserve0, vReserve1] : [reserve1, reserve0, vReserve1, vReserve0];
-                return new Pair(address, sdkCore.TokenAmount.fromRawAmount(tokenA, balances[0]), sdkCore.TokenAmount.fromRawAmount(tokenB, balances[1]), sdkCore.TokenAmount.fromRawAmount(tokenA, balances[2]), sdkCore.TokenAmount.fromRawAmount(tokenB, balances[3]), JSBI.BigInt(feeInPrecision), JSBI.BigInt(ampBps));
+                return new Pair(address, ksSdkCore.TokenAmount.fromRawAmount(tokenA, balances[0]), ksSdkCore.TokenAmount.fromRawAmount(tokenB, balances[1]), ksSdkCore.TokenAmount.fromRawAmount(tokenA, balances[2]), ksSdkCore.TokenAmount.fromRawAmount(tokenB, balances[3]), JSBI.BigInt(feeInPrecision), JSBI.BigInt(ampBps));
               });
             });
           } catch (e) {

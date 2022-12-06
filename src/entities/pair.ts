@@ -128,22 +128,19 @@ export class Pair {
     if (JSBI.equal(this.reserve0.quotient, ZERO) || JSBI.equal(this.reserve1.quotient, ZERO)) {
       throw new InsufficientReservesError()
     }
-
     const outputToken = inputAmount.currency.equals(this.token0) ? this.token1 : this.token0
     const inputReserve = this.virtualReserveOf(inputAmount.currency)
     const outputReserve = this.virtualReserveOf(outputToken)
-
     const inputAmountWithFee = JSBI.divide(
       JSBI.multiply(inputAmount.quotient, JSBI.subtract(PRECISION, this.fee)),
       PRECISION
     )
-
+    
     const numerator = JSBI.multiply(inputAmountWithFee, outputReserve.quotient)
     const denominator = JSBI.add(inputReserve.quotient, inputAmountWithFee)
-
     const outputAmount = TokenAmount.fromRawAmount(outputToken, JSBI.divide(numerator, denominator))
-
     if (JSBI.greaterThanOrEqual(outputAmount.quotient, this.reserveOf(outputToken).quotient)) {
+      console.log('debug get out st4 throw1::', outputAmount.quotient.toString(), this.reserveOf(outputToken).quotient.toString())
       throw new InsufficientReservesError()
     }
 

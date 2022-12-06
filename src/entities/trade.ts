@@ -300,7 +300,6 @@ export class Trade<TInput extends Currency, TOutput extends Currency, TTradeType
     //     ? currencyOut.chainId
     //     : undefined
     // invariant(chainId !== undefined, 'CHAIN_ID')
-
     const amountIn = currencyAmountIn.wrapped
     const tokenOut = currencyOut.wrapped
     for (let i = 0; i < pairs.length; i++) {
@@ -311,7 +310,6 @@ export class Trade<TInput extends Currency, TOutput extends Currency, TTradeType
       if (!pair[0].token0.equals(amountIn.currency) && !pair[0].token1.equals(amountIn.currency)) continue
       const token0 = pair[0].token0
       const token1 = pair[0].token1
-
       // iterate each pool, find the best rate
       let bestPool: Pair | undefined
       let bestAmountOut: TokenAmount | undefined
@@ -320,18 +318,17 @@ export class Trade<TInput extends Currency, TOutput extends Currency, TTradeType
         invariant(pool.token0.equals(token0), 'INVALID_PAIR')
         invariant(pool.token1.equals(token1), 'INVALID_PAIR')
         if (pool.reserve0.equalTo(ZERO) || pool.reserve1.equalTo(ZERO)) continue
-
         let amountOut: TokenAmount
         try {
           ;[amountOut] = pool.getOutputAmount(amountIn)
         } catch (error) {
           // input too low || not enough liquidity in this pair
+          
           if (error.isInsufficientInputAmountError || error.isInsufficientReservesError) {
             continue
           }
           throw error
         }
-
         if (bestAmountOut === undefined) {
           bestAmountOut = amountOut
           bestPool = pool
@@ -342,11 +339,13 @@ export class Trade<TInput extends Currency, TOutput extends Currency, TTradeType
           }
         }
       }
+
       // not found any pool has rate
 
       if (bestAmountOut === undefined || bestPool === undefined) {
         continue
       }
+
       // we have arrived at the output token, so this is the final trade of one of the paths
       if (bestAmountOut.currency.equals(tokenOut)) {
         sortedInsert(
@@ -377,7 +376,6 @@ export class Trade<TInput extends Currency, TOutput extends Currency, TTradeType
         )
       }
     }
-
     return bestTrades
   }
 

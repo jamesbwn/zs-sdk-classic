@@ -1594,6 +1594,7 @@ var Pair = /*#__PURE__*/function () {
     var outputAmount = TokenAmount.fromRawAmount(outputToken, JSBI.divide(numerator, denominator));
 
     if (JSBI.greaterThanOrEqual(outputAmount.quotient, this.reserveOf(outputToken).quotient)) {
+      console.log('debug get out st4 throw1::', outputAmount.quotient.toString(), this.reserveOf(outputToken).quotient.toString());
       throw new InsufficientReservesError();
     }
 
@@ -2233,6 +2234,7 @@ var Router = /*#__PURE__*/function () {
     var path = trade.route.path.map(function (token) {
       return token.address;
     });
+    console.log('debug route st1::', pairsPath, path);
     var deadline = 'ttl' in options ? "0x" + (Math.floor(new Date().getTime() / 1000) + options.ttl).toString(16) : "0x" + options.deadline.toString(16);
     var useFeeOnTransfer = Boolean(options.feeOnTransfer);
     var methodName;
